@@ -5,17 +5,16 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
 import { ROUTE_PATHS } from "../../routing/routes";
 import MaterialLink from "../../components/Link";
+import { registerCustomer } from "../../api/apiService";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -32,13 +31,19 @@ const customerSegmentOptions = [
 ];
 
 const RegisterPage = () => {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const name = data.get("fullName");
+    const segment = data.get("customerSegment");
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const response = await registerCustomer(name, segment, email, password);
+    } catch (error) {
+
+    }
+
   };
 
   return (
@@ -122,7 +127,7 @@ const RegisterPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Register
             </Button>
             <Grid container>
               <Grid item xs>
