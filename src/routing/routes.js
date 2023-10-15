@@ -2,10 +2,17 @@ import { Navigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 
+// Explicitly have route paths so we can reference it in the navigation code
+export const ROUTE_PATHS = {
+  default: "/",
+  login: "/login",
+  register: "/register"
+}
+
 export const routes = [
-  { path: "/", element: <LoginPage /> },
-  { path: "/login", element: <LoginPage /> },
-  { path: "/register", element: <RegisterPage /> },
+  { path: ROUTE_PATHS.default, element: <LoginPage /> },
+  { path: ROUTE_PATHS.login, element: <LoginPage /> },
+  { path: ROUTE_PATHS.register, element: <RegisterPage /> },
   //   { path: "/experience", element: <Experience /> },
   //   { path: "/projects", element: <Projects /> },
   //   { path: "/portfolio", element: <Home /> },

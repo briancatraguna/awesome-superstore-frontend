@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { ROUTE_PATHS } from "../../routing/routes";
 
 function Copyright(props) {
   return (
@@ -98,12 +99,12 @@ const LoginPage = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href={ROUTE_PATHS.default} variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href={ROUTE_PATHS.register} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
