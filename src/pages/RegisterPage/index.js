@@ -14,6 +14,7 @@ import Container from "@mui/material/Container";
 import InputLabel from "@mui/material/InputLabel";
 import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
+import { ROUTE_PATHS } from "../../routing/routes";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -129,7 +130,7 @@ const RegisterPage = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href={ROUTE_PATHS.login} variant="body2">
                   {"Already have an account? Sign In"}
                 </Link>
               </Grid>
