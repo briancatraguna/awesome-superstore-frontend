@@ -15,6 +15,7 @@ import { ROUTE_PATHS } from "../../routing/routes";
 import MaterialLink from "../../components/Link";
 import { registerCustomer } from "../../api/apiService";
 import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import { useNavigate } from "react-router-dom";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -31,6 +32,8 @@ const customerSegmentOptions = [
 ];
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,8 +43,10 @@ const RegisterPage = () => {
     const password = data.get("password");
     try {
       const response = await registerCustomer(name, segment, email, password);
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+      navigate(ROUTE_PATHS.login);
     } catch (error) {
-
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
     }
 
   };

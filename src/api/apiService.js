@@ -1,13 +1,4 @@
-import axios from "axios";
-
-const BASE_URL = "http://localhost:3000";
-
-const client = axios.create({
-    baseURL: BASE_URL,
-    validateStatus: (_) => {
-        return true;
-    }
-})
+import { client } from "./client";
 
 export const registerCustomer = async (name, segment, email, password) => {
     const requestBody = {
@@ -17,5 +8,9 @@ export const registerCustomer = async (name, segment, email, password) => {
         password: password
     }
     const response = await client.post("/auth/register", requestBody);
-    console.log(response);
+    if (response.status === 200) {
+        return { success: true, message: response.data.message };
+    } else {
+        throw new Error(response.data.message);
+    }
 }
