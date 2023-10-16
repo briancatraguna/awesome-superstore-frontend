@@ -14,3 +14,16 @@ export const registerCustomer = async (name, segment, email, password) => {
         throw new Error(response.data.message);
     }
 }
+
+export const loginCustomer = async (email, password) => {
+    const requestBody = {
+        email: email,
+        password: password
+    }
+    const response = await client.post("/auth/login", requestBody);
+    if (response.status === 200) {
+        return { success: true, message: response.data.message };
+    } else {
+        throw new Error(response.data.message);
+    }
+}

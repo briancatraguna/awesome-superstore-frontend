@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,6 +13,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { ROUTE_PATHS } from "../../routing/routes";
 import MaterialLink from "../../components/Link";
+import { loginCustomer } from "../../api/apiService";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 
 function Copyright(props) {
   return (
@@ -36,10 +38,14 @@ const LoginPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const response = loginCustomer(email, password);
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    }
   };
 
   return (
