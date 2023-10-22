@@ -17,8 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
 import { clearAuthState } from "../../redux/authSlice";
 
-const pages = ["DASHBOARD", "ORDERS", "CART"];
-const settings = ["Profile", "Account", "Logout"];
+const pages = ["Dashboard", "Orders", "Cart"];
+const settings = ["Profile", "Logout"];
 
 const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(false);
@@ -45,8 +45,8 @@ const Header = (props) => {
   };
 
   const handleNavMenuClick = (e, navMenu) => {
-    console.log(navMenu);
-    setAnchorElNav(null);
+    // TODO PK Palak Keni - Navigate to nav menu screens
+    
   };
 
   const handleUserMenuClick = (e, userMenu) => {
@@ -97,7 +97,6 @@ const Header = (props) => {
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -164,7 +163,6 @@ const Header = (props) => {
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: "top",
