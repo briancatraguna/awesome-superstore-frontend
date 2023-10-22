@@ -9,16 +9,19 @@ import UserProfile from "../pages/UserProfile";
 export const ROUTE_PATHS = {
   default: "/",
   login: "/login",
-  register: "/register"
+  register: "/register",
+  forgotPassword: "/forgot-password",
+  addProduct: "/add-product",
+  userProfile: "/user-profile",
 }
 
 export const routes = [
   { path: ROUTE_PATHS.default, element: <LoginPage /> },
   { path: ROUTE_PATHS.login, element: <LoginPage /> },
   { path: ROUTE_PATHS.register, element: <RegisterPage /> },
-  { path: "/forgot-password", element: <ForgetPassword /> },
-  { path: "/add-product", element: <AddProduct /> },
-  { path: "/user-profile", element: <UserProfile /> },
+  { path: ROUTE_PATHS.forgotPassword, element: <ForgetPassword /> },
+  { path: ROUTE_PATHS.addProduct, element: <AddProduct /> },
+  { path: ROUTE_PATHS.userProfile, element: <UserProfile /> },
   // 3.  Dashboard ( show products)
   // 4.  User Profile (address & user details)
   // 5.  Cart Page(Current Orders)
