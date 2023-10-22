@@ -1,6 +1,9 @@
 import { Navigate } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
+import ForgetPassword from "../pages/ForgetPassword";
+import AddProduct from "../pages/AddProduct";
+import UserProfile from "../pages/UserProfile";
 
 // Explicitly have route paths so we can reference it in the navigation code
 export const ROUTE_PATHS = {
@@ -13,12 +16,14 @@ export const routes = [
   { path: ROUTE_PATHS.default, element: <LoginPage /> },
   { path: ROUTE_PATHS.login, element: <LoginPage /> },
   { path: ROUTE_PATHS.register, element: <RegisterPage /> },
-  //   { path: "/experience", element: <Experience /> },
-  //   { path: "/projects", element: <Projects /> },
-  //   { path: "/portfolio", element: <Home /> },
-  //   { path: "/portfolio/skills", element: <Skills /> },
-  //   { path: "/portfolio/education", element: <Education /> },
-  //   { path: "/portfolio/experience", element: <Experience /> },
-  //   { path: "/portfolio/projects", element: <Projects /> },
+  { path: "/forgot-password", element: <ForgetPassword /> },
+  { path: "/add-product", element: <AddProduct /> },
+  { path: "/user-profile", element: <UserProfile /> },
+  // 3.  Dashboard ( show products)
+  // 4.  User Profile (address & user details)
+  // 5.  Cart Page(Current Orders)
+  // 6.  Orders page (past orders)
+  // 7.  Returns page  ( returns/:order_id )
+  // 8.  Admin (to add / modify products )
   { path: "*", element: <Navigate to="/" /> },
 ];
