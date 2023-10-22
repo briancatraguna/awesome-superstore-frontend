@@ -43,7 +43,7 @@ const LoginPage = () => {
   const accessTokenState = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
     if (accessTokenState !== null) {
-      navigate(ROUTE_PATHS.userProfile);
+      // TODO PK Palak Keni - Navigate to dashboard
     }
   })
 
