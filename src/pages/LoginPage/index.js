@@ -40,12 +40,12 @@ function Copyright(props) {
 const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const accessTokenState = useSelector((state) => state.auth.accessToken);
+  const accessToken = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
-    if (accessTokenState !== null) {
+    if (accessToken !== null) {
       // TODO PK Palak Keni - Navigate to dashboard
     }
-  })
+  },[accessToken]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
