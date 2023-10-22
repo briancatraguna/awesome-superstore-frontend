@@ -22,7 +22,7 @@ export const loginCustomer = async (email, password) => {
     }
     const response = await client.post("/auth/login", requestBody);
     if (response.status === 200) {
-        return { success: true, message: response.data.message };
+        return { success: true, message: response.data.message, data: response.data };
     } else {
         throw new Error(response.data.message);
     }
