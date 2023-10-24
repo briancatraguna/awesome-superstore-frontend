@@ -9,7 +9,6 @@ import Box from "@mui/material/Box";
 import HomeIcon from "@mui/icons-material/Home";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
 
 const addressList = [
   {

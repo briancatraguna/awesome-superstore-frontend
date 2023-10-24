@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -8,11 +7,8 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
 
 const productMarketOptions = [
