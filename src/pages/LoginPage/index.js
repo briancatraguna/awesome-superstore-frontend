@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,6 +11,13 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { ROUTE_PATHS } from "../../routing/routes";
+import MaterialLink from "../../components/Link";
+import { loginCustomer } from "../../api/apiService";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setAccessTokenState } from "../../redux/authSlice";
 
 function Copyright(props) {
   return (
@@ -31,13 +38,27 @@ function Copyright(props) {
 }
 
 const LoginPage = () => {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  useEffect(() => {
+    if (accessToken !== null) {
+      // TODO PK Palak Keni - Navigate to dashboard
+    }
+  },[accessToken]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const response = await loginCustomer(email, password);
+      dispatch(setAccessTokenState(response.data.token));
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    }
   };
 
   return (
@@ -98,14 +119,10 @@ const LoginPage = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <MaterialLink to={ROUTE_PATHS.default} variant="body2" text={"Forgot password?"}/>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <MaterialLink to={ROUTE_PATHS.register} variant="body2" text={"Don't have an account? Sign Up"}/>
               </Grid>
             </Grid>
           </Box>

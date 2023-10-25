@@ -12,15 +12,21 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import StoreIcon from "@mui/icons-material/Store";
-// import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routing/routes";
+import { clearAuthState } from "../../redux/authSlice";
 
-const pages = ["DASHBOARD", "ORDERS", "CART"];
-const settings = ["Profile", "Account", "Logout"];
+const pages = ["Dashboard", "Orders", "Cart"];
+const settings = ["Profile", "Logout"];
 
 const Header = (props) => {
-  // const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(false);
+  const [anchorElUser, setAnchorElUser] = useState(false);
+  const accessToken = useSelector((state) => state.auth.accessToken);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -39,24 +45,19 @@ const Header = (props) => {
   };
 
   const handleNavMenuClick = (e, navMenu) => {
-    console.log(navMenu);
-    setAnchorElNav(null);
-    // if (navMenu === "HOME") {
-    //   navigate("/portfolio");
-    // } else if (navMenu === "SKILLS") {
-    //   navigate("/portfolio/skills");
-    // } else if (navMenu === "EDUCATION") {
-    //   navigate("/portfolio/education");
-    // } else if (navMenu === "EXPERIENCE") {
-    //   navigate("/portfolio/experience");
-    // } else if (navMenu === "PROJECTS") {
-    //   navigate("/portfolio/projects");
-    // } else {
-    //   navigate("/portfolio");
-    // }
+    // TODO PK Palak Keni - Navigate to nav menu screens
+    
   };
 
-  React.useEffect(() => {}, []);
+  const handleUserMenuClick = (e, userMenu) => {
+    if (userMenu === "Profile") {
+      navigate(ROUTE_PATHS.userProfile);
+    }
+    if (userMenu === "Logout") {
+      dispatch(clearAuthState());
+      navigate(ROUTE_PATHS.login);
+    }
+  }
 
   return (
     <AppBar position="fixed">
@@ -96,7 +97,6 @@ const Header = (props) => {
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -140,7 +140,6 @@ const Header = (props) => {
               textDecoration: "none",
             }}
           >
-            PORTFOLIO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -154,7 +153,9 @@ const Header = (props) => {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          {(accessToken !== null && accessToken !== undefined) &&
+          (
+            <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="User options">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <PersonIcon htmlColor="white" fontSize="large" alt="User" />
@@ -162,7 +163,6 @@ const Header = (props) => {
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: "top",
@@ -175,14 +175,18 @@ const Header = (props) => {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+            >{settings.map((setting) => (
+                <MenuItem 
+                  key={setting} 
+                  onClick={(e) => handleUserMenuClick(e, setting)}
+                >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
+          )
+          }
         </Toolbar>
       </Container>
     </AppBar>

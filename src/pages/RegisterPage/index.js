@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
+import { ROUTE_PATHS } from "../../routing/routes";
+import MaterialLink from "../../components/Link";
+import { registerCustomer } from "../../api/apiService";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import { useNavigate } from "react-router-dom";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -30,13 +32,22 @@ const customerSegmentOptions = [
 ];
 
 const RegisterPage = () => {
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const name = data.get("fullName");
+    const segment = data.get("customerSegment");
+    const email = data.get("email");
+    const password = data.get("password");
+    try {
+      const response = await registerCustomer(name, segment, email, password);
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+      navigate(ROUTE_PATHS.login);
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    }
   };
 
   return (
@@ -120,18 +131,14 @@ const RegisterPage = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Register
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
+                <MaterialLink to={ROUTE_PATHS.default} variant="body2" text={"Forgot password?"}/>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Already have an account? Sign In"}
-                </Link>
+                <MaterialLink to={ROUTE_PATHS.login} variant="body2" text={"Already have an account? Sign In"}/>
               </Grid>
             </Grid>
           </Box>
