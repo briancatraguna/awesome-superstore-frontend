@@ -4,6 +4,7 @@ import RegisterPage from "../pages/RegisterPage";
 import ForgetPassword from "../pages/ForgetPassword";
 import AddProduct from "../pages/AddProduct";
 import UserProfile from "../pages/UserProfile";
+import Dashboard from "../pages/Dashboard";
 
 // Explicitly have route paths so we can reference it in the navigation code
 export const ROUTE_PATHS = {
@@ -13,7 +14,8 @@ export const ROUTE_PATHS = {
   forgotPassword: "/forgot-password",
   addProduct: "/add-product",
   userProfile: "/user-profile",
-}
+  dashboard: "/dashboard",
+};
 
 export const routes = [
   { path: ROUTE_PATHS.default, element: <LoginPage /> },
@@ -22,6 +24,7 @@ export const routes = [
   { path: ROUTE_PATHS.forgotPassword, element: <ForgetPassword /> },
   { path: ROUTE_PATHS.addProduct, element: <AddProduct /> },
   { path: ROUTE_PATHS.userProfile, element: <UserProfile /> },
+  { path: ROUTE_PATHS.dashboard, element: <Dashboard /> },
   // 3.  Dashboard ( show products)
   // 4.  User Profile (address & user details)
   // 5.  Cart Page(Current Orders)
