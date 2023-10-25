@@ -14,7 +14,10 @@ import Container from "@mui/material/Container";
 import { ROUTE_PATHS } from "../../routing/routes";
 import MaterialLink from "../../components/Link";
 import { loginCustomer } from "../../api/apiService";
-import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import {
+  NOTIFICATION_TYPE,
+  emitNotification,
+} from "../../utils/emitNotification";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setAccessTokenState } from "../../redux/authSlice";
@@ -43,9 +46,9 @@ const LoginPage = () => {
   const accessToken = useSelector((state) => state.auth.accessToken);
   useEffect(() => {
     if (accessToken !== null) {
-      // TODO PK Palak Keni - Navigate to dashboard
+      navigate(ROUTE_PATHS.dashboard);
     }
-  },[accessToken]);
+  }, [accessToken]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -119,10 +122,18 @@ const LoginPage = () => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <MaterialLink to={ROUTE_PATHS.default} variant="body2" text={"Forgot password?"}/>
+                <MaterialLink
+                  to={ROUTE_PATHS.default}
+                  variant="body2"
+                  text={"Forgot password?"}
+                />
               </Grid>
               <Grid item>
-                <MaterialLink to={ROUTE_PATHS.register} variant="body2" text={"Don't have an account? Sign Up"}/>
+                <MaterialLink
+                  to={ROUTE_PATHS.register}
+                  variant="body2"
+                  text={"Don't have an account? Sign Up"}
+                />
               </Grid>
             </Grid>
           </Box>

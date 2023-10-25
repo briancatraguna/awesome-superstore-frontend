@@ -16,9 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
 import { clearAuthState } from "../../redux/authSlice";
+import {
+  NOTIFICATION_TYPE,
+  emitNotification,
+} from "../../utils/emitNotification";
 
 const pages = ["Dashboard", "Orders", "Cart"];
-const settings = ["Profile", "Logout"];
+const loggedInSettings = ["Profile", "Logout"];
+const loggedOutSettings = ["Login"];
 
 const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(false);
@@ -27,10 +32,6 @@ const Header = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -45,8 +46,19 @@ const Header = (props) => {
   };
 
   const handleNavMenuClick = (e, navMenu) => {
-    // TODO PK Palak Keni - Navigate to nav menu screens
-    
+    if (accessToken !== null && accessToken !== undefined) {
+      if (navMenu === "Dashboard") {
+        navigate(ROUTE_PATHS.dashboard);
+      } else if (navMenu === "Orders") {
+        navigate(ROUTE_PATHS.orders);
+      } else if (navMenu === "Cart") {
+        navigate(ROUTE_PATHS.cart);
+      } else {
+        navigate(ROUTE_PATHS.default);
+      }
+    } else {
+      navigate(ROUTE_PATHS.default);
+    }
   };
 
   const handleUserMenuClick = (e, userMenu) => {
@@ -55,18 +67,23 @@ const Header = (props) => {
     }
     if (userMenu === "Logout") {
       dispatch(clearAuthState());
+      emitNotification(
+        NOTIFICATION_TYPE.SUCCESS,
+        "User Logged Out Successfully"
+      );
       navigate(ROUTE_PATHS.login);
     }
-  }
+    if (userMenu === "Logout") {
+      navigate(ROUTE_PATHS.login);
+    }
+    handleCloseUserMenu(e);
+  };
 
   return (
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <StoreIcon
-            fontSize="large"
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
-          />
+          <StoreIcon fontSize="large" sx={{ display: { md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -85,63 +102,7 @@ const Header = (props) => {
             AWESOME INC.
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem
-                  key={page}
-                  onClick={(e) => handleNavMenuClick(e, page)}
-                >
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              ml: 2,
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
@@ -153,9 +114,7 @@ const Header = (props) => {
             ))}
           </Box>
 
-          {(accessToken !== null && accessToken !== undefined) &&
-          (
-            <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="User options">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <PersonIcon htmlColor="white" fontSize="large" alt="User" />
@@ -175,18 +134,26 @@ const Header = (props) => {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
-            >{settings.map((setting) => (
-                <MenuItem 
-                  key={setting} 
-                  onClick={(e) => handleUserMenuClick(e, setting)}
-                >
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+            >
+              {accessToken !== null && accessToken !== undefined
+                ? loggedInSettings.map((setting) => (
+                    <MenuItem
+                      key={setting}
+                      onClick={(e) => handleUserMenuClick(e, setting)}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))
+                : loggedOutSettings.map((setting) => (
+                    <MenuItem
+                      key={setting}
+                      onClick={(e) => handleUserMenuClick(e, setting)}
+                    >
+                      <Typography textAlign="center">{setting}</Typography>
+                    </MenuItem>
+                  ))}
             </Menu>
           </Box>
-          )
-          }
         </Toolbar>
       </Container>
     </AppBar>
