@@ -1,36 +1,26 @@
 import React, { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { productData } from "../../utils/product-data-json";
 import { DataGrid } from "@mui/x-data-grid";
 import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
+import { getAllProducts } from "../../api/apiService";
 
 const Dashboard = () => {
-  const [cart, setCart] = useState([
-    "TEC-PH-2878-1-1",
-    "TEC-PH-3017-1-1",
-    "TEC-PH-3121-1-1",
-    "TEC-PH-3127-3-1",
-    "TEC-PH-3128-1-1",
-  ]);
+  const [cart, setCart] = useState([]);
+  const [productData, setProductData] = useState([]);
 
   const onRowsSelectionHandler = (ids) => {
-    // const selectedRowsData = ids.map((id) =>
-    //   productData.find((row) => row.id === id)
-    // );
-    // console.log(selectedRowsData);
-    console.log(ids);
     setCart(ids);
   };
+
+  useEffect(() => {
+    getAllProducts().then((data) => {
+      setProductData(data.data.products);
+    });
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150, hide: true },
@@ -70,9 +60,9 @@ const Dashboard = () => {
           <Typography variant="h6" sx={{ mb: 3 }}>
             Select products below to add to cart
           </Typography>
-          {/* <Box sx={{ mt: 1 }}> */}
 
           <DataGrid
+            sx={{ mb: 10 }}
             autoHeight
             rows={productData}
             columns={columns}
