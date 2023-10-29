@@ -40,3 +40,20 @@ export const getAllProducts = async () => {
     throw new Error(response.data.message);
   }
 };
+
+export const updateCustomer = async (customerId, customerName, segment, email) => {
+  const requestBody = {
+    customerId: customerId,
+    customerName: customerName,
+    segment: segment,
+    email: email
+  };
+  const response = await client.post("/customer", requestBody);
+  if (response.status === 200) {
+    return {
+      success: true
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}

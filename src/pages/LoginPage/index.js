@@ -20,7 +20,7 @@ import {
 } from "../../utils/emitNotification";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setAccessTokenState } from "../../redux/authSlice";
+import { setAccessTokenState, setCustomerIdState } from "../../redux/authSlice";
 
 function Copyright(props) {
   return (
@@ -58,6 +58,7 @@ const LoginPage = () => {
     try {
       const response = await loginCustomer(email, password);
       dispatch(setAccessTokenState(response.data.token));
+      dispatch(setCustomerIdState(response.data.customer.cust_id));
       emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
     } catch (error) {
       emitNotification(NOTIFICATION_TYPE.ERROR, error.message);

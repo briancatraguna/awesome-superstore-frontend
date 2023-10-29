@@ -3,17 +3,16 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
+import { updateCustomer } from "../../api/apiService";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setCustomerIdState } from "../../redux/authSlice";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -30,13 +29,22 @@ const customerSegmentOptions = [
 ];
 
 const UserDetails = () => {
-  const handleSubmit = (event) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const customerId = useSelector((state) => state.auth.customerId);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const fullName = data.get("fullName");
+    const email = data.get("email");
+    const customerSegment = data.get("customerSegment");
+    try {
+      const response = await updateCustomer(customerId, fullName, customerSegment, email);
+      
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -99,25 +107,6 @@ const UserDetails = () => {
                 </MenuItem>
               ))}
             </TextField>
-            {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            /> */}
-
-            {/* <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button> */}
             <Grid container spacing={3}>
               <Grid item xs>
                 <Button

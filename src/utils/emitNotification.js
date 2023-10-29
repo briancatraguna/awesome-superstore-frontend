@@ -18,11 +18,11 @@ export const emitNotification = (type, message) => {
 		theme: "colored",
 	};
 
-	return type === "info"
+	return type === NOTIFICATION_TYPE.INFO
 		? toast.info(message, config)
-		: type === "success"
+		: type === NOTIFICATION_TYPE.SUCCESS
 		? toast.success(message, config)
-		: type === "error"
+		: type === NOTIFICATION_TYPE.ERROR
 		? toast.error(message, config)
 		: toast(message, {
 				position: "top-right",
