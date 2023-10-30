@@ -57,3 +57,15 @@ export const updateCustomer = async (customerId, customerName, segment, email) =
     throw new Error(response.data.message);
   }
 }
+
+export const getCustomerById = async (customerId) => {
+  const response = await authenticatedClient.get(`/customer/${customerId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}

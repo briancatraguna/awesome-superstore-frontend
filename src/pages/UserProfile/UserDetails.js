@@ -9,7 +9,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { MenuItem } from "@mui/material";
-import { updateCustomer } from "../../api/apiService";
+import { getCustomerById, updateCustomer } from "../../api/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCustomerIdState } from "../../redux/authSlice";
@@ -30,18 +30,25 @@ const customerSegmentOptions = [
 ];
 
 const UserDetails = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const customerId = useSelector((state) => state.auth.customerId);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [segment, setSegment] = useState(null);
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      const response = await getCustomerById(customerId);
+      setFullName(response.data.cust_name);
+      setSegment(response.data.segment);
+      setEmail(response.data.email);
+    }
+    fetchCustomer();
+  },[customerId])
+
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const fullName = data.get("fullName");
-    const email = data.get("email");
-    const customerSegment = data.get("customerSegment");
     try {
-      const response = await updateCustomer(customerId, fullName, customerSegment, email);
+      await updateCustomer(customerId, fullName, segment, email);
       emitNotification(NOTIFICATION_TYPE.SUCCESS, "Updated customer data successfully");
     } catch (error) {
       emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
@@ -68,7 +75,6 @@ const UserDetails = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -82,6 +88,8 @@ const UserDetails = () => {
               autoComplete="fullName"
               type="text"
               autoFocus
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -92,6 +100,8 @@ const UserDetails = () => {
               name="email"
               type="email"
               autoFocus
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -101,9 +111,10 @@ const UserDetails = () => {
               name="customerSegment"
               label="Customer Segment"
               helperText="Please select Customer Segment"
+              value={customerSegmentOptions.find(option => option.value === segment)}
             >
               {customerSegmentOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+                <MenuItem key={option.value} value={option.value} onClick={e => setSegment(option.value)}>
                   {option.label}
                 </MenuItem>
               ))}
@@ -115,6 +126,7 @@ const UserDetails = () => {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
+                  onClick={handleSubmit}
                 >
                   Edit Details
                 </Button>
