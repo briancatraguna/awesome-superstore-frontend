@@ -9,39 +9,21 @@ import Box from "@mui/material/Box";
 import HomeIcon from "@mui/icons-material/Home";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useSelector } from "react-redux";
+import { getAddressByCustomerId } from "../../api/apiService";
 
-const addressList = [
-  {
-    city: "New York City",
-    state: "New York",
-    country: "USA",
-    region: "North America",
-    postalCode: "07306",
-  },
-  {
-    city: "New York City",
-    state: "New York",
-    country: "USA",
-    region: "North America",
-    postalCode: "07306",
-  },
-  {
-    city: "New York City",
-    state: "New York",
-    country: "USA",
-    region: "North America",
-    postalCode: "07306",
-  },
-];
 const AddressDetails = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const customerId = useSelector((state) => state.auth.customerId);
+  const [addresses, setAddresses] = useState([]);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      const response = await getAddressByCustomerId(customerId);
+      setAddresses(response.data);
+    }
+
+    fetchAddress();
+  },[customerId])
 
   return (
     <>
@@ -68,37 +50,37 @@ const AddressDetails = () => {
             Your existing addresses
           </Typography>
 
-          {addressList.map((address) => (
+          {addresses.map((address) => (
             <Card variant="outlined" sx={{ minWidth: 400, mt: 1, mb: 1 }}>
               <CardContent>
                 <Grid container spacing={2}>
                   <Grid item xs>
                     <Typography variant="subtitle2" gutterBottom>
-                      City : {address.city}
+                      City : {address.city_name}
                     </Typography>
                   </Grid>
                   <Grid item xs>
                     <Typography variant="subtitle2" gutterBottom>
-                      State : {address.state}
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2}>
-                  <Grid item xs>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Country : {address.country}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs>
-                    <Typography variant="subtitle2" gutterBottom>
-                      Region : {address.region}
+                      State : {address.state_name}
                     </Typography>
                   </Grid>
                 </Grid>
                 <Grid container spacing={2}>
                   <Grid item xs>
                     <Typography variant="subtitle2" gutterBottom>
-                      Zip Code : {address.postalCode}
+                      Country : {address.country_name}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Region : {address.region_name}
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Zip Code : {address.postal_code}
                     </Typography>
                   </Grid>
                   <Grid item xs>
