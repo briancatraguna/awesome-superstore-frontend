@@ -3,17 +3,17 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import InputLabel from "@mui/material/InputLabel";
-import NativeSelect from "@mui/material/NativeSelect";
 import { MenuItem } from "@mui/material";
+import { getCustomerById, updateCustomer } from "../../api/apiService";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { setCustomerIdState } from "../../redux/authSlice";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -30,13 +30,30 @@ const customerSegmentOptions = [
 ];
 
 const UserDetails = () => {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+  const customerId = useSelector((state) => state.auth.customerId);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [segment, setSegment] = useState("");
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      const response = await getCustomerById(customerId);
+      setFullName(response.data.cust_name);
+      setSegment(response.data.segment.toString());
+      setEmail(response.data.email);
+    }
+    fetchCustomer();
+  },[customerId])
+
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      await updateCustomer(customerId, fullName, segment, email);
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, "Updated customer data successfully");
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    }
   };
 
   return (
@@ -59,9 +76,9 @@ const UserDetails = () => {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
             sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
           >
             <TextField
               margin="normal"
@@ -73,6 +90,8 @@ const UserDetails = () => {
               autoComplete="fullName"
               type="text"
               autoFocus
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -83,6 +102,8 @@ const UserDetails = () => {
               name="email"
               type="email"
               autoFocus
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -92,6 +113,8 @@ const UserDetails = () => {
               name="customerSegment"
               label="Customer Segment"
               helperText="Please select Customer Segment"
+              value={segment}
+              onChange={e => setSegment(e.target.value)}
             >
               {customerSegmentOptions.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -99,25 +122,6 @@ const UserDetails = () => {
                 </MenuItem>
               ))}
             </TextField>
-            {/* <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            /> */}
-
-            {/* <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button> */}
             <Grid container spacing={3}>
               <Grid item xs>
                 <Button
@@ -126,7 +130,7 @@ const UserDetails = () => {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Edit Details
+                  Save Details
                 </Button>
               </Grid>
               <Grid item xs>

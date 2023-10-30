@@ -69,7 +69,7 @@ const Header = (props) => {
       dispatch(clearAuthState());
       emitNotification(
         NOTIFICATION_TYPE.SUCCESS,
-        "User Logged Out Successfully"
+        "User logged out successfully"
       );
       navigate(ROUTE_PATHS.login);
     }

@@ -1,4 +1,4 @@
-import { client } from "./client";
+import { authenticatedClient, client } from "./client";
 
 export const registerCustomer = async (name, segment, email, password) => {
   const requestBody = {
@@ -40,3 +40,32 @@ export const getAllProducts = async () => {
     throw new Error(response.data.message);
   }
 };
+
+export const updateCustomer = async (customerId, customerName, segment, email) => {
+  const requestBody = {
+    customerId: customerId,
+    customerName: customerName,
+    segment: segment,
+    email: email
+  };
+  const response = await authenticatedClient.post("/customer", requestBody);
+  if (response.status === 200) {
+    return {
+      success: true
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const getCustomerById = async (customerId) => {
+  const response = await authenticatedClient.get(`/customer/${customerId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}

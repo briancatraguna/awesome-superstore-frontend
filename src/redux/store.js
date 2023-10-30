@@ -8,13 +8,15 @@ const store = configureStore({
     preloadedState: {
         auth: {
             accessToken: localStorage.getItem("accessToken"),
+            customerId: localStorage.getItem("customerId")
         }
     }
 });
 
 store.subscribe(() => {
-    const { accessToken } = store.getState().auth;
+    const { accessToken, customerId } = store.getState().auth;
     localStorage.setItem("accessToken", accessToken);
+    localStorage.setItem("customerId", customerId);
 });
 
 export default store;
