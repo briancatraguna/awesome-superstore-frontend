@@ -47,6 +47,7 @@ const UserDetails = () => {
 
 
   const handleSubmit = async (event) => {
+    event.preventDefault()
     try {
       await updateCustomer(customerId, fullName, segment, email);
       emitNotification(NOTIFICATION_TYPE.SUCCESS, "Updated customer data successfully");
@@ -112,6 +113,7 @@ const UserDetails = () => {
               name="customerSegment"
               label="Customer Segment"
               helperText="Please select Customer Segment"
+              value={segment}
               onChange={e => setSegment(e.target.value)}
             >
               {customerSegmentOptions.map((option) => (
@@ -128,7 +130,7 @@ const UserDetails = () => {
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Edit Details
+                  Save Details
                 </Button>
               </Grid>
               <Grid item xs>
