@@ -33,13 +33,13 @@ const UserDetails = () => {
   const customerId = useSelector((state) => state.auth.customerId);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const [segment, setSegment] = useState(null);
+  const [segment, setSegment] = useState("");
 
   useEffect(() => {
     const fetchCustomer = async () => {
       const response = await getCustomerById(customerId);
       setFullName(response.data.cust_name);
-      setSegment(response.data.segment);
+      setSegment(response.data.segment.toString());
       setEmail(response.data.email);
     }
     fetchCustomer();
@@ -77,6 +77,7 @@ const UserDetails = () => {
             component="form"
             noValidate
             sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
           >
             <TextField
               margin="normal"
@@ -111,10 +112,10 @@ const UserDetails = () => {
               name="customerSegment"
               label="Customer Segment"
               helperText="Please select Customer Segment"
-              value={customerSegmentOptions.find(option => option.value === segment)}
+              onChange={e => setSegment(e.target.value)}
             >
               {customerSegmentOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value} onClick={e => setSegment(option.value)}>
+                <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
@@ -126,7 +127,6 @@ const UserDetails = () => {
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
-                  onClick={handleSubmit}
                 >
                   Edit Details
                 </Button>
