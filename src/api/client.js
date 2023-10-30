@@ -8,3 +8,13 @@ export const client = axios.create({
     return true;
   },
 });
+
+export const authenticatedClient = axios.create({
+  baseURL: BASE_URL,
+  validateStatus: (_) => {
+    return true;
+  },
+  headers: {
+    "Authorization": "Bearer " + localStorage.getItem("accessToken")
+  }
+});

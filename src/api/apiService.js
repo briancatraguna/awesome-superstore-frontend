@@ -1,4 +1,4 @@
-import { client } from "./client";
+import { authenticatedClient, client } from "./client";
 
 export const registerCustomer = async (name, segment, email, password) => {
   const requestBody = {
@@ -48,7 +48,7 @@ export const updateCustomer = async (customerId, customerName, segment, email) =
     segment: segment,
     email: email
   };
-  const response = await client.post("/customer", requestBody);
+  const response = await authenticatedClient.post("/customer", requestBody);
   if (response.status === 200) {
     return {
       success: true

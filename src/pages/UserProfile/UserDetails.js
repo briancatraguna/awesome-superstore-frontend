@@ -13,6 +13,7 @@ import { updateCustomer } from "../../api/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setCustomerIdState } from "../../redux/authSlice";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 const customerSegmentOptions = [
   {
     value: "1",
@@ -41,9 +42,9 @@ const UserDetails = () => {
     const customerSegment = data.get("customerSegment");
     try {
       const response = await updateCustomer(customerId, fullName, customerSegment, email);
-      
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, "Updated customer data successfully");
     } catch (error) {
-      
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
     }
   };
 
