@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllCitiesByState, getAllCountriesByRegion, getAllRegions, getAllStatesByCountry } from "../../api/apiService";
-import { Avatar, Box, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+import { addAddress, getAllCitiesByState, getAllCountriesByRegion, getAllRegions, getAllStatesByCountry } from "../../api/apiService";
+import { Avatar, Box, Button, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routing/routes";
 
 
 const AddAddress = () => {
     const customerId = useSelector((state) => state.auth.customerId);
+    const navigate = useNavigate();
 
     const [regions, setRegions] = useState([]);
     const [selectedRegion, setSelectedRegion] = useState(null);
@@ -19,6 +22,8 @@ const AddAddress = () => {
 
     const [cities, setCities] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
+
+    const [postalCode, setPostalCode] = useState("");
 
     useEffect(() => {
         const fetchRegions = async () => {
@@ -55,6 +60,17 @@ const AddAddress = () => {
         fetchCities();
     }, [selectedState])
 
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            await addAddress(selectedCity, postalCode, customerId);
+            emitNotification(NOTIFICATION_TYPE.SUCCESS, "Added new address successfully");
+            navigate(ROUTE_PATHS.userProfile);
+        } catch (error) {
+            emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+        }
+    }
+
     return (
         <>
             <Container component="main" sx={{ pt: 2 }}>
@@ -83,7 +99,7 @@ const AddAddress = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 5 }}>
+                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}>
                         <InputLabel id="country">Country</InputLabel>
                         <Select
                             labelId="country"
@@ -99,7 +115,7 @@ const AddAddress = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 5 }}>
+                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}>
                         <InputLabel id="state">State</InputLabel>
                         <Select
                             labelId="state"
@@ -115,7 +131,7 @@ const AddAddress = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 5 }}>
+                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}>
                         <InputLabel id="city">City</InputLabel>
                         <Select
                             labelId="city"
@@ -131,8 +147,26 @@ const AddAddress = () => {
                             ))}
                         </Select>
                     </FormControl>
+                    <TextField
+                        id="postalCode"
+                        name="postalCode"
+                        type="postalCode"
+                        autoFocus
+                        label="Postal Code"
+                        fullWidth
+                        sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}
+                        value={postalCode}
+                        onChange={e => setPostalCode(e.target.value)} />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                        onClick={handleSubmit}
+                    >
+                        Add New Address
+                    </Button>
                 </Box>
-
             </Container>
         </>
     )

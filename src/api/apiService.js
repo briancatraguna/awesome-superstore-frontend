@@ -129,3 +129,20 @@ export const getAllCitiesByState = async (stateId) => {
     throw new Error(response.data.message);
   }
 }
+
+export const addAddress = async (cityId, postalCode, customerId) => {
+  const requestBody = {
+    cityId: cityId,
+    postalCode: postalCode,
+    customerId: customerId
+  }
+  const response = await authenticatedClient.put('/address', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
