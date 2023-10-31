@@ -146,3 +146,20 @@ export const addAddress = async (cityId, postalCode, customerId) => {
     throw new Error(response.data.message);
   }
 }
+
+export const editAddress = async (addressId, cityId, postalCode) => {
+  const requestBody = {
+    addressId: addressId,
+    cityId: cityId,
+    postalCode: postalCode
+  }
+  const response = await authenticatedClient.post('/address', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
