@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getAllCountriesByRegion, getAllRegions, getAllStatesByCountry } from "../../api/apiService";
+import { getAllCitiesByState, getAllCountriesByRegion, getAllRegions, getAllStatesByCountry } from "../../api/apiService";
 import { Avatar, Box, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 
 
 const AddAddress = () => {
     const customerId = useSelector((state) => state.auth.customerId);
+
     const [regions, setRegions] = useState([]);
     const [selectedRegion, setSelectedRegion] = useState(null);
 
@@ -15,6 +16,9 @@ const AddAddress = () => {
 
     const [states, setStates] = useState([]);
     const [selectedState, setSelectedState] = useState(null);
+
+    const [cities, setCities] = useState([]);
+    const [selectedCity, setSelectedCity] = useState(null);
 
     useEffect(() => {
         const fetchRegions = async () => {
@@ -41,6 +45,15 @@ const AddAddress = () => {
         }
         fetchStates();
     }, [selectedCountry]);
+
+    useEffect(() => {
+        const fetchCities = async () => {
+            if (selectedState === null) return;
+            const response = await getAllCitiesByState(selectedState);
+            setCities(response.data);
+        }
+        fetchCities();
+    }, [selectedState])
 
     return (
         <>
@@ -98,6 +111,22 @@ const AddAddress = () => {
                             {states.map((state) => (
                                 <MenuItem key={state.state_id} value={state.state_id}>
                                     {state.state_name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 5 }}>
+                        <InputLabel id="city">City</InputLabel>
+                        <Select
+                            labelId="city"
+                            id="city"
+                            value={selectedCity}
+                            label="city"
+                            onChange={e => setSelectedCity(e.target.value)}
+                        >
+                            {cities.map((city) => (
+                                <MenuItem key={city.city_id} value={city.city_id}>
+                                    {city.city_name}
                                 </MenuItem>
                             ))}
                         </Select>

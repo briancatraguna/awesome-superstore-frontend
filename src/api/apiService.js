@@ -117,3 +117,15 @@ export const getAllStatesByCountry = async (countryId) => {
     throw new Error(response.data.message);
   }
 }
+
+export const getAllCitiesByState = async (stateId) => {
+  const response = await authenticatedClient.get(`/address/cities/${stateId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
