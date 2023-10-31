@@ -81,3 +81,39 @@ export const getAddressByCustomerId = async(customerId) => {
     throw new Error(response.data.message);
   }
 }
+
+export const getAllRegions = async () => {
+  const response = await authenticatedClient.get('/address/regions');
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const getAllCountriesByRegion = async (regionId) => {
+  const response = await authenticatedClient.get(`/address/countries/${regionId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const getAllStatesByCountry = async (countryId) => {
+  const response = await authenticatedClient.get(`/address/states/${countryId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}

@@ -11,8 +11,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useSelector } from "react-redux";
 import { getAddressByCustomerId } from "../../api/apiService";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routing/routes";
 
 const AddressDetails = () => {
+  const navigate = useNavigate();
   const customerId = useSelector((state) => state.auth.customerId);
   const [addresses, setAddresses] = useState([]);
 
@@ -43,7 +46,7 @@ const AddressDetails = () => {
           <Typography component="h1" variant="h5">
             Address Details
           </Typography>
-          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={() => navigate(ROUTE_PATHS.addAddress)}>
             Add new Address
           </Button>
           <Typography component="h2" variant="h6">
