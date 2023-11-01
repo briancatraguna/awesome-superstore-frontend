@@ -7,10 +7,12 @@ import UserProfile from "../pages/UserProfile";
 import Dashboard from "../pages/Dashboard";
 import CartPage from "../pages/CartPage";
 import OrdersPage from "../pages/OrdersPage";
+import AddAddress from "../pages/AddAddress";
+import EditAddress from "../pages/EditAddress";
 
 // Explicitly have route paths so we can reference it in the navigation code
 export const ROUTE_PATHS = {
-  default: "/",
+  default: "*",
   login: "/login",
   register: "/register",
   forgotPassword: "/forgot-password",
@@ -19,6 +21,8 @@ export const ROUTE_PATHS = {
   dashboard: "/dashboard",
   cart: "/cart",
   orders: "/orders",
+  addAddress: "/add-address",
+  editAddress: "/edit-address"
 };
 
 export const routes = [
@@ -31,6 +35,8 @@ export const routes = [
   { path: ROUTE_PATHS.dashboard, element: <Dashboard /> },
   { path: ROUTE_PATHS.cart, element: <CartPage /> },
   { path: ROUTE_PATHS.orders, element: <OrdersPage /> },
+  { path: ROUTE_PATHS.addAddress, element: <AddAddress />},
+  { path: ROUTE_PATHS.editAddress, element: <EditAddress />},
   // 3.  Dashboard ( show products)
   // 4.  User Profile (address & user details)
   // 5.  Cart Page(Current Orders)
