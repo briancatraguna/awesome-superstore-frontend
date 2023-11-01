@@ -87,7 +87,7 @@ const AddressDetails = () => {
                     </Typography>
                   </Grid>
                   <Grid item xs>
-                    <Button fullWidth variant="contained">
+                    <Button fullWidth variant="contained" onClick={() => navigate(ROUTE_PATHS.editAddress + `/${address.addr_id}`)}>
                       Edit Address
                     </Button>
                   </Grid>

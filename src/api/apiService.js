@@ -163,3 +163,15 @@ export const editAddress = async (addressId, cityId, postalCode) => {
     throw new Error(response.data.message);
   }
 }
+
+export const getAddressById = async (addressId) => {
+  const response = await authenticatedClient.get(`/address/id/${addressId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
