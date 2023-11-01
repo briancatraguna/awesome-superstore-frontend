@@ -12,7 +12,7 @@ import EditAddress from "../pages/EditAddress";
 
 // Explicitly have route paths so we can reference it in the navigation code
 export const ROUTE_PATHS = {
-  default: "/",
+  default: "*",
   login: "/login",
   register: "/register",
   forgotPassword: "/forgot-password",
@@ -22,7 +22,7 @@ export const ROUTE_PATHS = {
   cart: "/cart",
   orders: "/orders",
   addAddress: "/add-address",
-  editAddress: "edit-address"
+  editAddress: "/edit-address"
 };
 
 export const routes = [
