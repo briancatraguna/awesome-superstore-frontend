@@ -175,3 +175,33 @@ export const getAddressById = async (addressId) => {
     throw new Error(response.data.message);
   }
 }
+
+export const sendOTPByEmail = async (email) => {
+  const response = await client.post(`/auth/sendOTP/${email}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      message: response.data.message
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const changePasswordByCustId = async (customerId, otpCode, password, confirmPassword) => {
+  const requestBody = {
+    customerId: customerId,
+    otpCode: otpCode,
+    password: password,
+    confirmPassword: confirmPassword
+  }
+  const response = await authenticatedClient.post('/auth/changePassword/custId', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
