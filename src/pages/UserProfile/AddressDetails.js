@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { getAddressByCustomerId } from "../../api/apiService";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 
 const AddressDetails = () => {
   const navigate = useNavigate();
@@ -21,8 +22,12 @@ const AddressDetails = () => {
 
   useEffect(() => {
     const fetchAddress = async () => {
-      const response = await getAddressByCustomerId(customerId);
-      setAddresses(response.data);
+      try {
+        const response = await getAddressByCustomerId(customerId);
+        setAddresses(response.data);
+      } catch (error) {
+        emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+      }
     }
 
     fetchAddress();

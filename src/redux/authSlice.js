@@ -14,9 +14,9 @@ export const authSlice = createSlice({
             state.customerId = action.payload;
         },
         clearAuthState(state) {
-            localStorage.clear();
             state.accessToken = null;
             state.customerId = null;
+            localStorage.clear();
         }
     }
 });

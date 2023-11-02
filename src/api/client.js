@@ -9,12 +9,16 @@ export const client = axios.create({
   },
 });
 
-export const authenticatedClient = axios.create({
-  baseURL: BASE_URL,
-  validateStatus: (_) => {
-    return true;
-  },
-  headers: {
-    "Authorization": "Bearer " + localStorage.getItem("accessToken")
-  }
-});
+const authenticatedClient = () => {
+  return axios.create({
+    baseURL: BASE_URL,
+    validateStatus: (_) => {
+      return true;
+    },
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("accessToken")
+    }
+  });
+}
+
+export default authenticatedClient;
