@@ -13,8 +13,15 @@ import { productData } from "../../utils/product-data-json";
 import { DataGrid } from "@mui/x-data-grid";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
+import Paper from "@mui/material/Paper";
+import { useSelector } from "react-redux";
 
 const CartPage = () => {
+  const cartData = useSelector((state) => state.cart.cart);
+
+  useEffect(() => {
+    console.log(cartData);
+  }, []);
   return (
     <>
       <Container component="main" sx={{ pt: 2 }}>
@@ -27,12 +34,17 @@ const CartPage = () => {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h2" sx={{ mt: 10 }}>
-            Cart Page
+          <Typography component="h1" variant="h2" sx={{ mt: 3 }}>
+            Your Cart
           </Typography>
           <Typography variant="h6" sx={{ mb: 3 }}>
             Items in your cart are below
           </Typography>
+
+          <Paper
+            variant="outlined"
+            sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}
+          ></Paper>
         </Box>
       </Container>
     </>

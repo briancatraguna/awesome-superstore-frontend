@@ -7,18 +7,76 @@ import Container from "@mui/material/Container";
 import { DataGrid } from "@mui/x-data-grid";
 import Fab from "@mui/material/Fab";
 import { getAllProducts } from "../../api/apiService";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routing/routes";
+import {
+  setAllProducts,
+  updateCart,
+  updateSelectedProducts,
+} from "../../redux/cartSlice";
+import {
+  NOTIFICATION_TYPE,
+  emitNotification,
+} from "../../utils/emitNotification";
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [productData, setProductData] = useState([]);
+  const reduxCart = useSelector((state) => state.cart.cart);
+  const reduxSelectedProduct = useSelector(
+    (state) => state.cart.selectedProducts
+  );
 
   const onRowsSelectionHandler = (ids) => {
     setCart(ids);
+    dispatch(updateSelectedProducts(ids));
+  };
+
+  const addSelectedProductstoCart = async () => {
+    var cartSet = new Set(cart);
+
+    var addDataToReduxCart = new Array(reduxCart);
+
+    for (var i = 0; i < addDataToReduxCart.length; i++) {
+      if (!cartSet.has(addDataToReduxCart.id)) {
+        addDataToReduxCart.splice(i, 1);
+      }
+    }
+
+    productData.forEach((product) => {
+      if (cartSet.has(product.id)) {
+        var isItemPresentInReduxCart = false;
+
+        for (var i = 0; i < addDataToReduxCart.length; i++) {
+          if (addDataToReduxCart[i].id === product.id) {
+            isItemPresentInReduxCart = true;
+            break;
+          }
+        }
+
+        if (!isItemPresentInReduxCart) {
+          addDataToReduxCart.push(product);
+        }
+      }
+    });
+    dispatch(updateCart(addDataToReduxCart));
+    emitNotification(
+      NOTIFICATION_TYPE.SUCCESS,
+      "Cart Updated Succesfully. Redirecting you to cart shortly ...."
+    );
+    await setTimeout(() => {
+      navigate(ROUTE_PATHS.cart);
+    }, 6000);
   };
 
   useEffect(() => {
     getAllProducts().then((data) => {
       setProductData(data.data.products);
+      dispatch(setAllProducts(data.data.products));
+      setCart(reduxSelectedProduct);
     });
   }, []);
 
@@ -48,6 +106,7 @@ const Dashboard = () => {
               style={{ position: "fixed" }}
               variant="extended"
               color="primary"
+              onClick={addSelectedProductstoCart}
             >
               <ShoppingCartIcon sx={{ mr: 1 }} />
               Add to Cart
