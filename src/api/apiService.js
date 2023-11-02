@@ -1,4 +1,4 @@
-import { authenticatedClient, client } from "./client";
+import authenticatedClient, { client } from "./client";
 
 export const registerCustomer = async (name, segment, email, password) => {
   const requestBody = {
@@ -48,7 +48,8 @@ export const updateCustomer = async (customerId, customerName, segment, email) =
     segment: segment,
     email: email
   };
-  const response = await authenticatedClient.post("/customer", requestBody);
+  const client = authenticatedClient();
+  const response = await client.post("/customer", requestBody);
   if (response.status === 200) {
     return {
       success: true
@@ -59,7 +60,8 @@ export const updateCustomer = async (customerId, customerName, segment, email) =
 }
 
 export const getCustomerById = async (customerId) => {
-  const response = await authenticatedClient.get(`/customer/${customerId}`);
+  const client = authenticatedClient();
+  const response = await client.get(`/customer/${customerId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -71,7 +73,8 @@ export const getCustomerById = async (customerId) => {
 }
 
 export const getAddressByCustomerId = async(customerId) => {
-  const response = await authenticatedClient.get(`/address/${customerId}`);
+  const client = authenticatedClient();
+  const response = await client.get(`/address/${customerId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -83,7 +86,8 @@ export const getAddressByCustomerId = async(customerId) => {
 }
 
 export const getAllRegions = async () => {
-  const response = await authenticatedClient.get('/address/regions');
+  const client = authenticatedClient();
+  const response = await client.get('/address/regions');
   if (response.status === 200) {
     return {
       success: true,
@@ -95,7 +99,8 @@ export const getAllRegions = async () => {
 }
 
 export const getAllCountriesByRegion = async (regionId) => {
-  const response = await authenticatedClient.get(`/address/countries/${regionId}`);
+  const client = authenticatedClient();
+  const response = await client.get(`/address/countries/${regionId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -107,7 +112,8 @@ export const getAllCountriesByRegion = async (regionId) => {
 }
 
 export const getAllStatesByCountry = async (countryId) => {
-  const response = await authenticatedClient.get(`/address/states/${countryId}`);
+  const client = authenticatedClient();
+  const response = await client.get(`/address/states/${countryId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -119,7 +125,8 @@ export const getAllStatesByCountry = async (countryId) => {
 }
 
 export const getAllCitiesByState = async (stateId) => {
-  const response = await authenticatedClient.get(`/address/cities/${stateId}`);
+  const client = authenticatedClient();
+  const response = await client.get(`/address/cities/${stateId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -136,7 +143,8 @@ export const addAddress = async (cityId, postalCode, customerId) => {
     postalCode: postalCode,
     customerId: customerId
   }
-  const response = await authenticatedClient.put('/address', requestBody);
+  const client = authenticatedClient();
+  const response = await client.put('/address', requestBody);
   if (response.status === 200) {
     return {
       success: true,
@@ -153,7 +161,8 @@ export const editAddress = async (addressId, cityId, postalCode) => {
     cityId: cityId,
     postalCode: postalCode
   }
-  const response = await authenticatedClient.post('/address', requestBody);
+  const client = authenticatedClient()
+  const response = await client.post('/address', requestBody);
   if (response.status === 200) {
     return {
       success: true,
@@ -165,7 +174,8 @@ export const editAddress = async (addressId, cityId, postalCode) => {
 }
 
 export const getAddressById = async (addressId) => {
-  const response = await authenticatedClient.get(`/address/id/${addressId}`);
+  const client = authenticatedClient()
+  const response = await client.get(`/address/id/${addressId}`);
   if (response.status === 200) {
     return {
       success: true,
@@ -195,7 +205,8 @@ export const changePasswordByCustId = async (customerId, otpCode, password, conf
     password: password,
     confirmPassword: confirmPassword
   }
-  const response = await authenticatedClient.post('/auth/changePassword/custId', requestBody);
+  const client = authenticatedClient()
+  const response = await client.post('/auth/changePassword/custId', requestBody);
   if (response.status === 200) {
     return {
       success: true,
