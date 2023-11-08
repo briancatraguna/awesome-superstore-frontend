@@ -9,11 +9,14 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
+import { sendOTPByEmail } from "../../api/apiService";
+import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 
 const steps = ["Enter Email", "Enter New Password"];
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [email, setEmail] = React.useState("");
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -22,6 +25,16 @@ export default function Checkout() {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  const sendOTP = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await sendOTPByEmail(email);
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    }
+  }
 
   return (
     <React.Fragment>
@@ -56,11 +69,13 @@ export default function Checkout() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={e => setEmail(e.target.value)}
               />
               <Box sx={{ display: "flex", justifyContent: "space-around" }}>
                 <Button
                   variant="contained"
-                  // onClick={handleNext}
+                  onClick={sendOTP}
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Send Code
