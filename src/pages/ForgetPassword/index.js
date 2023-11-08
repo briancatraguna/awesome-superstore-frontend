@@ -9,7 +9,7 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
-import { sendOTPByEmail } from "../../api/apiService";
+import { sendOTPByEmail, validateOTP } from "../../api/apiService";
 import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 
 const steps = ["Enter Email", "Enter New Password"];
@@ -17,9 +17,19 @@ const steps = ["Enter Email", "Enter New Password"];
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [email, setEmail] = React.useState("");
+  const [otpCode, setOtpCode] = React.useState("");
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const handleNext = async () => {
+    if (activeStep === 0) {
+      try {
+        const response = await validateOTP(email, otpCode);
+        emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+        setActiveStep(activeStep + 1);
+      } catch (error) {
+        emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+      }
+    }
+
   };
 
   const handleBack = () => {
@@ -89,6 +99,8 @@ export default function Checkout() {
                   name="enter-code"
                   type="text"
                   autoFocus
+                  value={otpCode}
+                  onChange={e => setOtpCode(e.target.value)}
                 />
               </Box>
               <Typography variant="subtitle1" sx={{ mt: 2, ml: 2 }}>
