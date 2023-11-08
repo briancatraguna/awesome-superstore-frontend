@@ -233,3 +233,21 @@ export const validateOTP = async (email, otpCode) => {
     throw new Error(response.data.message);
   }
 }
+
+export const changePassword = async (email, password, confirmPassword) => {
+  const requestBody = {
+    email: email,
+    password: password,
+    confirmPassword: confirmPassword
+  }
+  const client = authenticatedClient();
+  const response = await client.post('/auth/forgotPassword/change', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      message: response.data.message
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}

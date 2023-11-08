@@ -9,15 +9,21 @@ import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { TextField } from "@mui/material";
-import { sendOTPByEmail, validateOTP } from "../../api/apiService";
+import { changePassword, sendOTPByEmail, validateOTP } from "../../api/apiService";
 import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_PATHS } from "../../routing/routes";
 
 const steps = ["Enter Email", "Enter New Password"];
 
 export default function Checkout() {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = React.useState(0);
   const [email, setEmail] = React.useState("");
   const [otpCode, setOtpCode] = React.useState("");
+
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const handleNext = async () => {
     if (activeStep === 0) {
@@ -25,6 +31,14 @@ export default function Checkout() {
         const response = await validateOTP(email, otpCode);
         emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
         setActiveStep(activeStep + 1);
+      } catch (error) {
+        emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+      }
+    } else {
+      try {
+        const response = await changePassword(email, password, confirmPassword);
+        emitNotification(NOTIFICATION_TYPE.SUCCESS, response.message);
+        navigate(ROUTE_PATHS.login);
       } catch (error) {
         emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
       }
@@ -127,6 +141,8 @@ export default function Checkout() {
                 label="Enter new password"
                 type="password"
                 id="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -136,6 +152,8 @@ export default function Checkout() {
                 label="Re-Type new password"
                 type="password"
                 id="password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
               />
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>

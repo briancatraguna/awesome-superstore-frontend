@@ -51,7 +51,7 @@ const ChangePassword = () => {
                     <TextField
                         id="newPassword"
                         name="newPassword"
-                        type="newPassword"
+                        type="password"
                         autoFocus
                         label="New Password"
                         fullWidth
@@ -61,7 +61,7 @@ const ChangePassword = () => {
                     <TextField
                         id="confirmPassword"
                         name="confirmPassword"
-                        type="confirmPassword"
+                        type="password"
                         autoFocus
                         label="Confirm Password"
                         fullWidth
