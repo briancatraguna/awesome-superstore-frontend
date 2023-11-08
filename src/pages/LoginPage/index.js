@@ -124,7 +124,7 @@ const LoginPage = () => {
             <Grid container>
               <Grid item xs>
                 <MaterialLink
-                  to={ROUTE_PATHS.default}
+                  to={ROUTE_PATHS.forgotPassword}
                   variant="body2"
                   text={"Forgot password?"}
                 />
