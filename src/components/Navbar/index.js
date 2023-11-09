@@ -21,7 +21,7 @@ import {
   emitNotification,
 } from "../../utils/emitNotification";
 
-const pages = ["Dashboard", "Orders", "Cart"];
+const pages = ["Dashboard", "Cart", "Orders"];
 const loggedInSettings = ["Profile", "Logout"];
 const loggedOutSettings = ["Login"];
 
