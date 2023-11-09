@@ -23,46 +23,38 @@ import {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [cart, setCart] = useState([]);
-  const [productData, setProductData] = useState([]);
+  const selectedProducts = useSelector((state) => state.cart.selectedProducts);
+  const productData = useSelector((state) => state.cart.allProducts);
   const reduxCart = useSelector((state) => state.cart.cart);
-  const reduxSelectedProduct = useSelector(
-    (state) => state.cart.selectedProducts
-  );
 
   const onRowsSelectionHandler = (ids) => {
-    setCart(ids);
     dispatch(updateSelectedProducts(ids));
   };
 
   const addSelectedProductstoCart = async () => {
-    var cartSet = new Set(cart);
+    var selectedProductSet = new Set(selectedProducts);
+    let newCartIds = new Set();
 
-    var addDataToReduxCart = new Array(reduxCart);
-
-    for (var i = 0; i < addDataToReduxCart.length; i++) {
-      if (!cartSet.has(addDataToReduxCart.id)) {
-        addDataToReduxCart.splice(i, 1);
-      }
-    }
-
-    productData.forEach((product) => {
-      if (cartSet.has(product.id)) {
-        var isItemPresentInReduxCart = false;
-
-        for (var i = 0; i < addDataToReduxCart.length; i++) {
-          if (addDataToReduxCart[i].id === product.id) {
-            isItemPresentInReduxCart = true;
-            break;
-          }
-        }
-
-        if (!isItemPresentInReduxCart) {
-          addDataToReduxCart.push(product);
-        }
+    let newCart = [];
+    reduxCart.forEach((element) => {
+      if (selectedProductSet.has(element.id)) {
+        newCart.push(element);
+        newCartIds.add(element.id);
       }
     });
-    dispatch(updateCart(addDataToReduxCart));
+
+    //add new products from selection
+    productData.forEach((product) => {
+      if (selectedProductSet.has(product.id) && !newCartIds.has(product.id)) {
+        newCart.push({
+          ...product,
+          quantity: 1,
+        });
+        newCartIds.add(product.id);
+      }
+    });
+
+    await dispatch(updateCart(newCart));
     emitNotification(
       NOTIFICATION_TYPE.SUCCESS,
       "Cart Updated Succesfully. Redirecting you to cart shortly ...."
@@ -74,16 +66,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     getAllProducts().then((data) => {
-      setProductData(data.data.products);
       dispatch(setAllProducts(data.data.products));
-      setCart(reduxSelectedProduct);
     });
+    console.log(reduxCart);
   }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150, hide: true },
     { field: "product_id", headerName: "Product ID", width: 150 },
     { field: "product_name", headerName: "Product Name", width: 400 },
+    { field: "price", headerName: "Price", width: 100 },
     { field: "market", headerName: "Market", width: 100 },
     { field: "category_name", headerName: "Category Name", width: 150 },
     { field: "sub_category_name", headerName: "Sub Category Name", width: 200 },
@@ -101,7 +93,7 @@ const Dashboard = () => {
             alignItems: "center",
           }}
         >
-          {cart.length !== 0 && (
+          {selectedProducts.length !== 0 && (
             <Fab
               style={{ position: "fixed" }}
               variant="extended"
@@ -138,7 +130,7 @@ const Dashboard = () => {
             onRowSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
             pageSizeOptions={[25, 50]}
             checkboxSelection
-            rowSelectionModel={cart}
+            rowSelectionModel={selectedProducts}
           />
           {/* </Box> */}
         </Box>
