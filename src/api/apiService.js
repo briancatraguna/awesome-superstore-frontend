@@ -72,7 +72,7 @@ export const getCustomerById = async (customerId) => {
   }
 }
 
-export const getAddressByCustomerId = async(customerId) => {
+export const getAddressByCustomerId = async (customerId) => {
   const client = authenticatedClient();
   const response = await client.get(`/address/${customerId}`);
   if (response.status === 200) {
@@ -211,6 +211,41 @@ export const changePasswordByCustId = async (customerId, otpCode, password, conf
     return {
       success: true,
       data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const validateOTP = async (email, otpCode) => {
+  const requestBody = {
+    email: email,
+    otpCode: otpCode
+  }
+  const client = authenticatedClient();
+  const response = await client.post('/auth/forgotPassword/validateOTP', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      message: response.data.message
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const changePassword = async (email, password, confirmPassword) => {
+  const requestBody = {
+    email: email,
+    password: password,
+    confirmPassword: confirmPassword
+  }
+  const client = authenticatedClient();
+  const response = await client.post('/auth/forgotPassword/change', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      message: response.data.message
     }
   } else {
     throw new Error(response.data.message);
