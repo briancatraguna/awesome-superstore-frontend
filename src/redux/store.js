@@ -13,10 +13,6 @@ const store = configureStore({
       customerId: localStorage.getItem("customerId"),
     },
     cart: {
-      allProducts:
-        localStorage.getItem("allProducts") === null
-          ? []
-          : JSON.parse(localStorage.getItem("allProducts")),
       cart:
         localStorage.getItem("cart") === null
           ? []

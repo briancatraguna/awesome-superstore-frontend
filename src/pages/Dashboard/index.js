@@ -66,7 +66,7 @@ const Dashboard = () => {
     );
     setTimeout(() => {
       navigate(ROUTE_PATHS.cart);
-    }, 6000);
+    }, 4000);
   };
 
   const columns = [

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -19,6 +16,8 @@ import {
   removeQuantity,
   removeProductFromCartAndSelection,
 } from "../../redux/cartSlice";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import Fab from "@mui/material/Fab";
 
 const CartPage = () => {
   const cartData = useSelector((state) => state.cart.cart);
@@ -35,7 +34,6 @@ const CartPage = () => {
     dispatch(removeProductFromCartAndSelection(product));
   };
 
-  useEffect(() => {}, []);
   useEffect(() => {
     var newTotal = 0;
     cartData.forEach((product) => {
@@ -55,7 +53,17 @@ const CartPage = () => {
             alignItems: "center",
           }}
         >
-          <Typography component="h1" variant="h2" sx={{ mt: 3 }}>
+          {cartData.length !== 0 && (
+              <Fab
+                  style={{ position: "fixed" }}
+                  variant="extended"
+                  color="primary"
+              >
+                <ShoppingCartIcon sx={{ mr: 1 }} />
+                Checkout
+              </Fab>
+          )}
+          <Typography component="h1" variant="h2" sx={{ mt: 10 }}>
             Your Cart
           </Typography>
           <Typography variant="h6" sx={{ mb: 3 }}>
