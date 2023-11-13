@@ -38,10 +38,7 @@ const AddProduct = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
   };
 
   return (
@@ -56,9 +53,6 @@ const AddProduct = () => {
             alignItems: "center",
           }}
         >
-          {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <PersonAddIcon />
-          </Avatar> */}
           <Typography component="h1" variant="h5">
             Add New Product
           </Typography>
