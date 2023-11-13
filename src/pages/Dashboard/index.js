@@ -17,19 +17,26 @@ import {
   NOTIFICATION_TYPE,
   emitNotification,
 } from "../../utils/emitNotification";
+import {getAllProducts} from "../../api/apiService";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectedProducts = useSelector((state) => state.cart.selectedProducts);
-  const productData = useSelector((state) => state.cart.allProducts);
+  const [productData, setProductData] = useState([]);
   const reduxCart = useSelector((state) => state.cart.cart);
+
+  useEffect(() => {
+    getAllProducts().then((data) => {
+      setProductData(data.data.products);
+    });
+  }, []);
 
   const onRowsSelectionHandler = (ids) => {
     dispatch(updateSelectedProducts(ids));
   };
 
-  const addSelectedProductstoCart = async () => {
+  const addSelectedProductsToCart = async () => {
     var selectedProductSet = new Set(selectedProducts);
     let newCartIds = new Set();
 
@@ -57,7 +64,7 @@ const Dashboard = () => {
       NOTIFICATION_TYPE.SUCCESS,
       "Cart Updated Succesfully. Redirecting you to cart shortly ...."
     );
-    await setTimeout(() => {
+    setTimeout(() => {
       navigate(ROUTE_PATHS.cart);
     }, 6000);
   };
@@ -89,7 +96,7 @@ const Dashboard = () => {
               style={{ position: "fixed" }}
               variant="extended"
               color="primary"
-              onClick={addSelectedProductstoCart}
+              onClick={addSelectedProductsToCart}
             >
               <ShoppingCartIcon sx={{ mr: 1 }} />
               Add to Cart
