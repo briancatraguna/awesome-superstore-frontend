@@ -251,3 +251,48 @@ export const changePassword = async (email, password, confirmPassword) => {
     throw new Error(response.data.message);
   }
 }
+
+export const getAllProductCategories = async() => {
+  const client = authenticatedClient();
+  const response = client.get('/products/category');
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const getAllProductSubcategories = async(categoryId) => {
+  const client = authenticatedClient();
+  const response = client.get(`products/subcategory/${categoryId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
+
+export const addProduct = async(productName, unitPrice, market, subcategoryId) => {
+  const client = authenticatedClient();
+  const requestBody = {
+    productName: productName,
+    unitPrice: unitPrice,
+    market: market,
+    subcategoryId: subcategoryId
+  }
+  const response = client.get('products', requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    }
+  } else {
+    throw new Error(response.data.message);
+  }
+}
