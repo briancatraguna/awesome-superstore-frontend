@@ -6,12 +6,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { DataGrid } from "@mui/x-data-grid";
 import Fab from "@mui/material/Fab";
-import { getAllProducts } from "../../api/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
 import {
-  setAllProducts,
   updateCart,
   updateSelectedProducts,
 } from "../../redux/cartSlice";
@@ -63,13 +61,6 @@ const Dashboard = () => {
       navigate(ROUTE_PATHS.cart);
     }, 6000);
   };
-
-  useEffect(() => {
-    getAllProducts().then((data) => {
-      dispatch(setAllProducts(data.data.products));
-    });
-    console.log(reduxCart);
-  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150, hide: true },

@@ -31,10 +31,9 @@ const store = configureStore({
 
 store.subscribe(() => {
   const { accessToken, customerId } = store.getState().auth;
-  const { allProducts, cart, selectedProducts } = store.getState().cart;
+  const { cart, selectedProducts } = store.getState().cart;
   localStorage.setItem("accessToken", accessToken);
   localStorage.setItem("customerId", customerId);
-  localStorage.setItem("allProducts", JSON.stringify(allProducts));
   localStorage.setItem("cart", JSON.stringify(cart));
   localStorage.setItem("selectedProducts", JSON.stringify(selectedProducts));
 });
