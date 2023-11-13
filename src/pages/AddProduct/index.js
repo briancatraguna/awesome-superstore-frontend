@@ -9,7 +9,7 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { MenuItem } from "@mui/material";
+import {FormControl, InputLabel, MenuItem} from "@mui/material";
 
 const productMarketOptions = [
   {
@@ -35,6 +35,9 @@ const productMarketOptions = [
 ];
 
 const AddProduct = () => {
+
+  const [productName, setProductName] = useState();
+  const [unitPrice, setUnitPrice] = useState();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,7 +46,7 @@ const AddProduct = () => {
 
   return (
     <>
-      <Container component="main" maxWidth="xs" sx={{ pt: 3 }}>
+      <Container component="main" sx={{ pt: 2 }}>
         <CssBaseline />
         <Box
           sx={{
@@ -56,64 +59,24 @@ const AddProduct = () => {
           <Typography component="h1" variant="h5">
             Add New Product
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
+          <TextField
               id="productName"
-              label="Product Name"
               name="productName"
-              autoComplete="productName"
+              label="Product Name"
+              fullWidth
               type="text"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              select
-              name="productMarket"
-              label="Product Market"
-              helperText="Please select Product Market"
-            >
-              {productMarketOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Already have an account? Sign In"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+              sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}
+              value={productName}
+              onChange={e => setProductName(e.target.value)}/>
+          <TextField
+            id="unitPrice"
+            name="unitPrice"
+            label="Unit Price (USD)"
+            type="number"
+            fullWidth
+            sx={{ marginLeft: 20, marginRight: 20, marginTop: 3 }}
+            value={unitPrice}
+            onChange={e => setUnitPrice(e.target.value)}/>
         </Box>
       </Container>
     </>
