@@ -6,12 +6,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { DataGrid } from "@mui/x-data-grid";
 import Fab from "@mui/material/Fab";
-import { getAllProducts } from "../../api/apiService";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
 import {
-  setAllProducts,
   updateCart,
   updateSelectedProducts,
 } from "../../redux/cartSlice";
@@ -19,19 +17,28 @@ import {
   NOTIFICATION_TYPE,
   emitNotification,
 } from "../../utils/emitNotification";
+import {getAllProducts} from "../../api/apiService";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const selectedProducts = useSelector((state) => state.cart.selectedProducts);
-  const productData = useSelector((state) => state.cart.allProducts);
+  const [productData, setProductData] = useState([]);
   const reduxCart = useSelector((state) => state.cart.cart);
+
+  useEffect(() => {
+    getAllProducts().then((data) => {
+      setProductData(data.data.products);
+    });
+  }, []);
 
   const onRowsSelectionHandler = (ids) => {
     dispatch(updateSelectedProducts(ids));
   };
 
-  const addSelectedProductstoCart = async () => {
+  const addSelectedProductsToCart = async () => {
     var selectedProductSet = new Set(selectedProducts);
     let newCartIds = new Set();
 
@@ -59,17 +66,10 @@ const Dashboard = () => {
       NOTIFICATION_TYPE.SUCCESS,
       "Cart Updated Succesfully. Redirecting you to cart shortly ...."
     );
-    await setTimeout(() => {
+    setTimeout(() => {
       navigate(ROUTE_PATHS.cart);
-    }, 6000);
+    }, 4000);
   };
-
-  useEffect(() => {
-    getAllProducts().then((data) => {
-      dispatch(setAllProducts(data.data.products));
-    });
-    console.log(reduxCart);
-  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 150, hide: true },
@@ -98,7 +98,7 @@ const Dashboard = () => {
               style={{ position: "fixed" }}
               variant="extended"
               color="primary"
-              onClick={addSelectedProductstoCart}
+              onClick={addSelectedProductsToCart}
             >
               <ShoppingCartIcon sx={{ mr: 1 }} />
               Add to Cart
@@ -111,6 +111,9 @@ const Dashboard = () => {
           <Typography variant="h6" sx={{ mb: 3 }}>
             Select products below to add to cart
           </Typography>
+          <Button variant="contained" sx={{mb:3}} startIcon={<AddIcon/>} onClick={e => navigate(ROUTE_PATHS.addProduct)}>
+            Add new product
+          </Button>
 
           <DataGrid
             sx={{ mb: 10 }}

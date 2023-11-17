@@ -20,6 +20,7 @@ import {
   NOTIFICATION_TYPE,
   emitNotification,
 } from "../../utils/emitNotification";
+import {clearCartState} from "../../redux/cartSlice";
 
 const pages = ["Dashboard", "Cart", "Orders"];
 const loggedInSettings = ["Profile", "Logout"];
@@ -67,6 +68,7 @@ const Header = (props) => {
     }
     if (userMenu === "Logout") {
       dispatch(clearAuthState());
+      dispatch(clearCartState());
       emitNotification(
         NOTIFICATION_TYPE.SUCCESS,
         "User logged out successfully"

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { addAddress, getAllCitiesByState, getAllCountriesByRegion, getAllRegions, getAllStatesByCountry } from "../../api/apiService";
 import { Avatar, Box, Button, Container, CssBaseline, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { NOTIFICATION_TYPE, emitNotification } from "../../utils/emitNotification";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
+import Typography from "@mui/material/Typography";
 
 
 const AddAddress = () => {
@@ -83,6 +84,9 @@ const AddAddress = () => {
                         alignItems: "center",
                     }}
                 >
+                    <Typography component="h1" variant="h5">
+                        Add New Address
+                    </Typography>
                     <FormControl fullWidth sx={{ marginLeft: 20, marginRight: 20, marginTop: 5 }}>
                         <InputLabel id="region">Region</InputLabel>
                         <Select
