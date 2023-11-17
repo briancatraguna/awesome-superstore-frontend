@@ -28,6 +28,7 @@ import {
   addQuantity,
   removeQuantity,
   removeProductFromCartAndSelection,
+  clearCartState,
 } from "../../redux/cartSlice";
 import { placeOrder, getAddressByCustomerId } from "../../api/apiService";
 import {
@@ -71,7 +72,7 @@ const CartPage = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState("");
-  const [selectedShipMode, setSelectedShipMode] = React.useState(1);
+  const [selectedShipMode, setSelectedShipMode] = React.useState("");
 
   const dispatch = useDispatch();
   const customerId = useSelector((state) => state.auth.customerId);
@@ -114,13 +115,21 @@ const CartPage = () => {
       sendCartData[i].discount = 0;
     }
     console.log(sendCartData);
-    await placeOrder(
-      sendCartData,
-      selectedAddressId,
-      customerId,
-      selectedShipMode,
-      shipping.shipDate
-    );
+    try {
+      const response = await placeOrder(
+        sendCartData,
+        selectedAddressId,
+        customerId,
+        selectedShipMode,
+        shipping.shipDate
+      );
+      emitNotification(NOTIFICATION_TYPE.SUCCESS, "Order placed successfully.");
+    } catch (error) {
+      emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+    } finally {
+      dispatch(clearCartState());
+      navigate(ROUTE_PATHS.dashboard);
+    }
   };
   const fetchAddress = async () => {
     try {
@@ -178,7 +187,9 @@ const CartPage = () => {
           {activeStep === 0 && (
             <React.Fragment>
               <Typography variant="h6" sx={{ mb: 3 }} align="center">
-                Items in your cart are below
+                {cartData.length === 0
+                  ? "No items in your cart"
+                  : "Items in your cart are below"}
               </Typography>
               {cartData.map((product) => (
                 <Paper
@@ -291,17 +302,11 @@ const CartPage = () => {
                 <Typography variant="h6" sx={{ mb: 5 }}>
                   Your Total is {total}
                 </Typography>
-                {/* <Button
-                  variant="contained"
-                  onClick={onClickPlaceOrder}
-                  sx={{ mb: 5 }}
-                >
-                  Place Order
-                </Button> */}
                 <Button
                   variant="contained"
                   onClick={handleNext}
                   sx={{ mt: 3, ml: 1 }}
+                  disabled={cartData.length === 0}
                 >
                   Next
                 </Button>
@@ -423,6 +428,7 @@ const CartPage = () => {
                 <Button
                   variant="contained"
                   onClick={onClickPlaceOrder}
+                  disabled={selectedAddressId === "" || selectedShipMode === ""}
                   sx={{ mt: 3, ml: 1 }}
                 >
                   Place Order
@@ -430,25 +436,6 @@ const CartPage = () => {
               </Box>
             </>
           )}
-          {/* <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="h6" sx={{ mb: 5 }}>
-              Your Total is {total}
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={onClickPlaceOrder}
-              sx={{ mb: 5 }}
-            >
-              Place Order
-            </Button>
-          </Box> */}
         </Paper>
       </Container>
     </>

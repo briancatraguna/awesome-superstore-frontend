@@ -9,15 +9,12 @@ import Fab from "@mui/material/Fab";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATHS } from "../../routing/routes";
-import {
-  updateCart,
-  updateSelectedProducts,
-} from "../../redux/cartSlice";
+import { updateCart, updateSelectedProducts } from "../../redux/cartSlice";
 import {
   NOTIFICATION_TYPE,
   emitNotification,
 } from "../../utils/emitNotification";
-import {getAllProducts} from "../../api/apiService";
+import { getAllProducts } from "../../api/apiService";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -29,6 +26,8 @@ const Dashboard = () => {
   const reduxCart = useSelector((state) => state.cart.cart);
 
   useEffect(() => {
+    onRowsSelectionHandler(selectedProducts);
+
     getAllProducts().then((data) => {
       setProductData(data.data.products);
     });
@@ -62,13 +61,10 @@ const Dashboard = () => {
     });
 
     await dispatch(updateCart(newCart));
-    emitNotification(
-      NOTIFICATION_TYPE.SUCCESS,
-      "Cart Updated Succesfully. Redirecting you to cart shortly ...."
-    );
+    emitNotification(NOTIFICATION_TYPE.SUCCESS, "Cart Updated Succesfully.");
     setTimeout(() => {
       navigate(ROUTE_PATHS.cart);
-    }, 4000);
+    }, 2000);
   };
 
   const columns = [
@@ -111,7 +107,12 @@ const Dashboard = () => {
           <Typography variant="h6" sx={{ mb: 3 }}>
             Select products below to add to cart
           </Typography>
-          <Button variant="contained" sx={{mb:3}} startIcon={<AddIcon/>} onClick={e => navigate(ROUTE_PATHS.addProduct)}>
+          <Button
+            variant="contained"
+            sx={{ mb: 3 }}
+            startIcon={<AddIcon />}
+            onClick={(e) => navigate(ROUTE_PATHS.addProduct)}
+          >
             Add new product
           </Button>
 
