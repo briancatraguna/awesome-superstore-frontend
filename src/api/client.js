@@ -16,9 +16,9 @@ const authenticatedClient = () => {
       return true;
     },
     headers: {
-      "Authorization": "Bearer " + localStorage.getItem("accessToken")
-    }
+      Authorization: "Bearer " + localStorage.getItem("accessToken"),
+    },
   });
-}
+};
 
 export default authenticatedClient;

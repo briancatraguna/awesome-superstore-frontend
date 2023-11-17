@@ -41,23 +41,28 @@ export const getAllProducts = async () => {
   }
 };
 
-export const updateCustomer = async (customerId, customerName, segment, email) => {
+export const updateCustomer = async (
+  customerId,
+  customerName,
+  segment,
+  email
+) => {
   const requestBody = {
     customerId: customerId,
     customerName: customerName,
     segment: segment,
-    email: email
+    email: email,
   };
   const client = authenticatedClient();
   const response = await client.post("/customer", requestBody);
   if (response.status === 200) {
     return {
-      success: true
-    }
+      success: true,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getCustomerById = async (customerId) => {
   const client = authenticatedClient();
@@ -65,12 +70,12 @@ export const getCustomerById = async (customerId) => {
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAddressByCustomerId = async (customerId) => {
   const client = authenticatedClient();
@@ -78,25 +83,25 @@ export const getAddressByCustomerId = async (customerId) => {
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAllRegions = async () => {
   const client = authenticatedClient();
-  const response = await client.get('/address/regions');
+  const response = await client.get("/address/regions");
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAllCountriesByRegion = async (regionId) => {
   const client = authenticatedClient();
@@ -104,12 +109,12 @@ export const getAllCountriesByRegion = async (regionId) => {
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAllStatesByCountry = async (countryId) => {
   const client = authenticatedClient();
@@ -117,12 +122,12 @@ export const getAllStatesByCountry = async (countryId) => {
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAllCitiesByState = async (stateId) => {
   const client = authenticatedClient();
@@ -130,124 +135,164 @@ export const getAllCitiesByState = async (stateId) => {
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const addAddress = async (cityId, postalCode, customerId) => {
   const requestBody = {
     cityId: cityId,
     postalCode: postalCode,
-    customerId: customerId
-  }
+    customerId: customerId,
+  };
   const client = authenticatedClient();
-  const response = await client.put('/address', requestBody);
+  const response = await client.put("/address", requestBody);
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const editAddress = async (addressId, cityId, postalCode) => {
   const requestBody = {
     addressId: addressId,
     cityId: cityId,
-    postalCode: postalCode
-  }
-  const client = authenticatedClient()
-  const response = await client.post('/address', requestBody);
+    postalCode: postalCode,
+  };
+  const client = authenticatedClient();
+  const response = await client.post("/address", requestBody);
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const getAddressById = async (addressId) => {
-  const client = authenticatedClient()
+  const client = authenticatedClient();
   const response = await client.get(`/address/id/${addressId}`);
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const sendOTPByEmail = async (email) => {
   const response = await client.post(`/auth/sendOTP/${email}`);
   if (response.status === 200) {
     return {
       success: true,
-      message: response.data.message
-    }
+      message: response.data.message,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
-export const changePasswordByCustId = async (customerId, otpCode, password, confirmPassword) => {
+export const changePasswordByCustId = async (
+  customerId,
+  otpCode,
+  password,
+  confirmPassword
+) => {
   const requestBody = {
     customerId: customerId,
     otpCode: otpCode,
     password: password,
-    confirmPassword: confirmPassword
-  }
-  const client = authenticatedClient()
-  const response = await client.post('/auth/changePassword/custId', requestBody);
+    confirmPassword: confirmPassword,
+  };
+  const client = authenticatedClient();
+  const response = await client.post(
+    "/auth/changePassword/custId",
+    requestBody
+  );
   if (response.status === 200) {
     return {
       success: true,
-      data: response.data
-    }
+      data: response.data,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const validateOTP = async (email, otpCode) => {
   const requestBody = {
     email: email,
-    otpCode: otpCode
-  }
+    otpCode: otpCode,
+  };
   const client = authenticatedClient();
-  const response = await client.post('/auth/forgotPassword/validateOTP', requestBody);
+  const response = await client.post(
+    "/auth/forgotPassword/validateOTP",
+    requestBody
+  );
   if (response.status === 200) {
     return {
       success: true,
-      message: response.data.message
-    }
+      message: response.data.message,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
 
 export const changePassword = async (email, password, confirmPassword) => {
   const requestBody = {
     email: email,
     password: password,
-    confirmPassword: confirmPassword
-  }
+    confirmPassword: confirmPassword,
+  };
   const client = authenticatedClient();
-  const response = await client.post('/auth/forgotPassword/change', requestBody);
+  const response = await client.post(
+    "/auth/forgotPassword/change",
+    requestBody
+  );
   if (response.status === 200) {
     return {
       success: true,
-      message: response.data.message
-    }
+      message: response.data.message,
+    };
   } else {
     throw new Error(response.data.message);
   }
-}
+};
+
+export const placeOrder = async (
+  order,
+  in_addr_id,
+  in_cust_id,
+  in_ship_mode,
+  in_ship_date
+) => {
+  const requestBody = {
+    order,
+    addr_id: in_addr_id,
+    cust_id: in_cust_id,
+    ship_mode: in_ship_mode,
+    ship_date: in_ship_date,
+  };
+  const client = authenticatedClient();
+  const response = await client.post("/orders", requestBody);
+  if (response.status === 200) {
+    return {
+      success: true,
+    };
+  } else {
+    console.log(response.data);
+    throw new Error(response.data.message);
+  }
+};
