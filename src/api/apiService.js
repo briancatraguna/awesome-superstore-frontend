@@ -323,6 +323,20 @@ export const getAllProductSubcategories = async (categoryId) => {
   }
 };
 
+export const getOrdersByCustomerAndReturned = async (customerId, isReturned) => {
+  const client = authenticatedClient();
+  const isReturnedSerialized = isReturned ? '1' : '0';
+  const response = await client.get(`orders?customerId=${customerId}&isReturned=${isReturnedSerialized}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data,
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
+
 export const addProduct = async (
   productName,
   unitPrice,
