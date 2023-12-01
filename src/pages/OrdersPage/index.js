@@ -12,7 +12,9 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {getOrdersByCustomerAndReturned} from "../../api/apiService";
+import {getOrdersByCustomerAndReturned, returnOrder} from "../../api/apiService";
+import {Cached, MoreHoriz} from "@mui/icons-material";
+import {emitNotification, NOTIFICATION_TYPE} from "../../utils/emitNotification";
 
 const OrdersPage = () => {
     const customerId = useSelector((state) => state.auth.customerId);
@@ -20,18 +22,29 @@ const OrdersPage = () => {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            const isReturned = tabValue === 1;
-            if (customerId === null) return;
-            const response = await getOrdersByCustomerAndReturned(customerId, isReturned);
-            setOrders(response.data);
-        }
         fetchOrders();
     }, [tabValue]);
+
+    const fetchOrders = async () => {
+        const isReturned = tabValue === 1;
+        if (customerId === null) return;
+        const response = await getOrdersByCustomerAndReturned(customerId, isReturned);
+        setOrders(response.data);
+    }
 
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
     };
+
+    const handleReturnOrder = async(orderId) => {
+        try {
+            await returnOrder(orderId);
+            emitNotification(NOTIFICATION_TYPE.SUCCESS, "Successfully returned order");
+            fetchOrders();
+        } catch (error) {
+            emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
+        }
+    }
 
     return (
         <>
@@ -71,6 +84,12 @@ const OrdersPage = () => {
                         sx={{mb: 4, pt: 5}}
                     >
                         <Stack spacing={2} sx={{pb: 5}}>
+                            {
+                                orders === null || orders.length === 0 &&
+                                <>
+                                    <Typography sx={{width: '100%', textAlign: 'center'}}>You have no orders</Typography>
+                                </>
+                            }
                             {orders.map((order) => (
                                 <Card sx={{pl: 5}}>
                                     <CardContent>
@@ -86,7 +105,10 @@ const OrdersPage = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button size="small">More Details</Button>
+                                        <Button endIcon={<MoreHoriz/>}>More Details</Button>
+                                        {tabValue === 0 &&
+                                            <Button size="smail" endIcon={<Cached/>} onClick={() => handleReturnOrder(order.order_id)}>Return Order</Button>
+                                        }
                                     </CardActions>
                                 </Card>
                             ))}

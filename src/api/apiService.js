@@ -337,6 +337,19 @@ export const getOrdersByCustomerAndReturned = async (customerId, isReturned) => 
   }
 }
 
+export const returnOrder = async(orderId) => {
+  const client = authenticatedClient();
+  const response = await client.post(`orders/return/${orderId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data,
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
+
 export const addProduct = async (
   productName,
   unitPrice,
