@@ -292,7 +292,6 @@ export const placeOrder = async (
       success: true,
     };
   } else {
-    console.log(response.data);
     throw new Error(response.data.message);
   }
 };
@@ -344,6 +343,19 @@ export const returnOrder = async(orderId) => {
     return {
       success: true,
       data: response.data,
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
+
+export const getOrderDetails = async(orderId) => {
+  const client = authenticatedClient();
+  const response = await client.get(`orders/details/${orderId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
     };
   } else {
     throw new Error("Network error");

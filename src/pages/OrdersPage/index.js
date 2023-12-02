@@ -15,9 +15,12 @@ import {useSelector} from "react-redux";
 import {getOrdersByCustomerAndReturned, returnOrder} from "../../api/apiService";
 import {Cached, MoreHoriz} from "@mui/icons-material";
 import {emitNotification, NOTIFICATION_TYPE} from "../../utils/emitNotification";
+import {useNavigate} from "react-router-dom";
+import {ROUTE_PATHS} from "../../routing/routes";
 
 const OrdersPage = () => {
     const customerId = useSelector((state) => state.auth.customerId);
+    const navigate = useNavigate();
     const [tabValue, setTabValue] = useState(0);
     const [orders, setOrders] = useState([]);
 
@@ -105,9 +108,13 @@ const OrdersPage = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button endIcon={<MoreHoriz/>}>More Details</Button>
+                                        <Button endIcon={<MoreHoriz/>} onClick={() => navigate(ROUTE_PATHS.orderDetails + `?orderId=${order.order_id}`)}>
+                                            More Details
+                                        </Button>
                                         {tabValue === 0 &&
-                                            <Button size="smail" endIcon={<Cached/>} onClick={() => handleReturnOrder(order.order_id)}>Return Order</Button>
+                                            <Button size="smail" endIcon={<Cached/>} onClick={() => handleReturnOrder(order.order_id)}>
+                                                Return Order
+                                            </Button>
                                         }
                                     </CardActions>
                                 </Card>
