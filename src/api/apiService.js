@@ -292,7 +292,6 @@ export const placeOrder = async (
       success: true,
     };
   } else {
-    console.log(response.data);
     throw new Error(response.data.message);
   }
 };
@@ -322,6 +321,46 @@ export const getAllProductSubcategories = async (categoryId) => {
     throw new Error("Network error");
   }
 };
+
+export const getOrdersByCustomerAndReturned = async (customerId, isReturned) => {
+  const client = authenticatedClient();
+  const isReturnedSerialized = isReturned ? '1' : '0';
+  const response = await client.get(`orders?customerId=${customerId}&isReturned=${isReturnedSerialized}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data,
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
+
+export const returnOrder = async(orderId) => {
+  const client = authenticatedClient();
+  const response = await client.post(`orders/return/${orderId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data,
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
+
+export const getOrderDetails = async(orderId) => {
+  const client = authenticatedClient();
+  const response = await client.get(`orders/details/${orderId}`);
+  if (response.status === 200) {
+    return {
+      success: true,
+      data: response.data
+    };
+  } else {
+    throw new Error("Network error");
+  }
+}
 
 export const addProduct = async (
   productName,

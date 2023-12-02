@@ -10,6 +10,7 @@ import OrdersPage from "../pages/OrdersPage";
 import AddAddress from "../pages/AddAddress";
 import EditAddress from "../pages/EditAddress";
 import ChangePassword from "../pages/ChangePassword";
+import OrderDetails from "../pages/OrderDetails";
 
 // Explicitly have route paths so we can reference it in the navigation code
 export const ROUTE_PATHS = {
@@ -24,7 +25,8 @@ export const ROUTE_PATHS = {
   orders: "/orders",
   addAddress: "/add-address",
   editAddress: "/edit-address",
-  changePassword: "/change-password"
+  changePassword: "/change-password",
+  orderDetails: "/order-details"
 };
 
 export const routes = [
@@ -40,6 +42,7 @@ export const routes = [
   { path: ROUTE_PATHS.addAddress, element: <AddAddress />},
   { path: ROUTE_PATHS.editAddress, element: <EditAddress />},
   { path: ROUTE_PATHS.changePassword, element: <ChangePassword />},
+  { path: ROUTE_PATHS.orderDetails, element: <OrderDetails />},
   // 3.  Dashboard ( show products)
   // 4.  User Profile (address & user details)
   // 5.  Cart Page(Current Orders)

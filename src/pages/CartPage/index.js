@@ -38,7 +38,7 @@ import {
 
 const steps = ["Edit Order", "Select Address"];
 
-const shipModeOptions = [
+export const shipModeOptions = [
   {
     value: "1",
     label: "First Class",
