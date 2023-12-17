@@ -30,9 +30,16 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(false);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const customerId = useSelector((state) => state.auth.customerId);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (customerId === '1') {
+      pages.push("Add Product")
+    }
+  }, [customerId]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -54,6 +61,8 @@ const Header = (props) => {
         navigate(ROUTE_PATHS.orders);
       } else if (navMenu === "Cart") {
         navigate(ROUTE_PATHS.cart);
+      } else if (navMenu === "Add Product") {
+        navigate(ROUTE_PATHS.addProduct);
       } else {
         navigate(ROUTE_PATHS.default);
       }
