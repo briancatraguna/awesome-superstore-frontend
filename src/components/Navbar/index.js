@@ -37,9 +37,7 @@ const Header = (props) => {
 
   useEffect(() => {
     if (customerId !== null && customerId !== undefined && customerId === '1') {
-      const newPage = pages;
-      newPage.push("Add Product");
-      setPages(newPage);
+      setPages(["Dashboard", "Cart", "Orders", "Add Product"]);
     }
   }, [customerId]);
 
