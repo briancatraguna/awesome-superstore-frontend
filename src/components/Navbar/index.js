@@ -22,7 +22,6 @@ import {
 } from "../../utils/emitNotification";
 import {clearCartState} from "../../redux/cartSlice";
 
-const pages = ["Dashboard", "Cart", "Orders"];
 const loggedInSettings = ["Profile", "Logout"];
 const loggedOutSettings = ["Login"];
 
@@ -31,13 +30,16 @@ const Header = (props) => {
   const [anchorElUser, setAnchorElUser] = useState(false);
   const accessToken = useSelector((state) => state.auth.accessToken);
   const customerId = useSelector((state) => state.auth.customerId);
+  const [pages, setPages] = useState(["Dashboard", "Cart", "Orders"])
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (customerId === '1') {
-      pages.push("Add Product")
+    if (customerId !== null && customerId !== undefined && customerId === '1') {
+      const newPage = pages;
+      newPage.push("Add Product");
+      setPages(newPage);
     }
   }, [customerId]);
 
