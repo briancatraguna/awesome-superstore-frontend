@@ -110,11 +110,9 @@ const CartPage = () => {
       profit: 0.1,
       sales: data.price * data.quantity,
     }));
-    console.log("inside onClickPlaceOrder");
     for (var i = 0; i < sendCartData.length; i++) {
       sendCartData[i].discount = 0;
     }
-    console.log(sendCartData);
     try {
       const response = await placeOrder(
         sendCartData,
@@ -124,11 +122,10 @@ const CartPage = () => {
         shipping.shipDate
       );
       emitNotification(NOTIFICATION_TYPE.SUCCESS, "Order placed successfully.");
+      dispatch(clearCartState());
+      navigate(ROUTE_PATHS.orders);
     } catch (error) {
       emitNotification(NOTIFICATION_TYPE.ERROR, error.message);
-    } finally {
-      dispatch(clearCartState());
-      navigate(ROUTE_PATHS.dashboard);
     }
   };
   const fetchAddress = async () => {
@@ -156,7 +153,7 @@ const CartPage = () => {
     cartData.forEach((product) => {
       newTotal += product.quantity * product.price;
     });
-    setTotal(newTotal);
+    setTotal(newTotal.toFixed(2));
   }, [cartData]);
   return (
     <>
