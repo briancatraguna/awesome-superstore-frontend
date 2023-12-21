@@ -38,6 +38,8 @@ const Header = (props) => {
   useEffect(() => {
     if (customerId !== null && customerId !== undefined && customerId === '1') {
       setPages(["Dashboard", "Cart", "Orders", "Add Product"]);
+    } else {
+      setPages(["Dashboard", "Cart", "Orders"]);
     }
   }, [customerId]);
 
