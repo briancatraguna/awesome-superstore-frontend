@@ -22,7 +22,6 @@ import {
 } from "../../utils/emitNotification";
 import {clearCartState} from "../../redux/cartSlice";
 
-const pages = ["Dashboard", "Cart", "Orders"];
 const loggedInSettings = ["Profile", "Logout"];
 const loggedOutSettings = ["Login"];
 
@@ -30,9 +29,17 @@ const Header = (props) => {
   const [anchorElNav, setAnchorElNav] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(false);
   const accessToken = useSelector((state) => state.auth.accessToken);
+  const customerId = useSelector((state) => state.auth.customerId);
+  const [pages, setPages] = useState(["Dashboard", "Cart", "Orders"])
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (customerId !== null && customerId !== undefined && customerId === '1') {
+      setPages(["Dashboard", "Cart", "Orders", "Add Product"]);
+    }
+  }, [customerId]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -54,6 +61,8 @@ const Header = (props) => {
         navigate(ROUTE_PATHS.orders);
       } else if (navMenu === "Cart") {
         navigate(ROUTE_PATHS.cart);
+      } else if (navMenu === "Add Product") {
+        navigate(ROUTE_PATHS.addProduct);
       } else {
         navigate(ROUTE_PATHS.default);
       }

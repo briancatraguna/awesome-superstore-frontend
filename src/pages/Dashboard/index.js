@@ -15,8 +15,6 @@ import {
   emitNotification,
 } from "../../utils/emitNotification";
 import { getAllProducts } from "../../api/apiService";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -107,14 +105,6 @@ const Dashboard = () => {
           <Typography variant="h6" sx={{ mb: 3 }}>
             Select products below to add to cart
           </Typography>
-          <Button
-            variant="contained"
-            sx={{ mb: 3 }}
-            startIcon={<AddIcon />}
-            onClick={(e) => navigate(ROUTE_PATHS.addProduct)}
-          >
-            Add new product
-          </Button>
 
           <DataGrid
             sx={{ mb: 10 }}
